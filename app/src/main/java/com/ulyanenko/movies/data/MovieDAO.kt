@@ -1,9 +1,10 @@
-package com.ulyanenko.movies
+package com.ulyanenko.movies.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.ulyanenko.movies.data.Movie
 import io.reactivex.rxjava3.core.Completable
 
 @Dao

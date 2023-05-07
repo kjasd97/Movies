@@ -1,4 +1,4 @@
-package com.ulyanenko.movies
+package com.ulyanenko.movies.data
 
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
@@ -15,7 +15,7 @@ class ApiFactory {
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build()
 
-        val apiService:ApiService = retrofit.create(ApiService::class.java)
+        val apiService: ApiService = retrofit.create(ApiService::class.java)
     }
 
 }

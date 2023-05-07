@@ -1,10 +1,12 @@
-package com.ulyanenko.movies
+package com.ulyanenko.movies.presentation
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.ulyanenko.movies.R
+import com.ulyanenko.movies.data.Trailer
 
 class TrailersAdapter : RecyclerView.Adapter<TrailersAdapter.TrailersViewHolder>() {
 
@@ -23,7 +25,8 @@ class TrailersAdapter : RecyclerView.Adapter<TrailersAdapter.TrailersViewHolder>
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrailersViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.trailer_item,
+        val view = LayoutInflater.from(parent.context).inflate(
+            R.layout.trailer_item,
             parent, false)
         return TrailersViewHolder(view)
     }
