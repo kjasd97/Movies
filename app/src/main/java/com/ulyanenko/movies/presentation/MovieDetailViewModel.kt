@@ -13,6 +13,10 @@ import com.ulyanenko.movies.domain.RemoveMovieUseCase
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 class MovieDetailViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -32,23 +36,23 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
 
     val compositeDisposable = CompositeDisposable()
 
+    private val scope = CoroutineScope(Dispatchers.IO)
+
 
     fun getFavouriteMovie(id: Int): LiveData<Movie> {
         return getMovie.getMovie(id)
     }
 
     fun insertMovie(movie: Movie) {
-        val disposable = addMovie.addMovie(movie)
-            .subscribeOn(Schedulers.io())
-            .subscribe()
-        compositeDisposable.add(disposable)
+        scope.launch {
+            addMovie.addMovie(movie)
+        }
     }
 
     fun removeMovie(movieId: Int) {
-        val disposable = deleteMovie.deleteMovie(movieId)
-            .subscribeOn(Schedulers.io())
-            .subscribe()
-        compositeDisposable.add(disposable)
+        scope.launch {
+            deleteMovie.deleteMovie(movieId)
+        }
     }
 
 
@@ -84,6 +88,7 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
+        scope.cancel()
     }
 
 

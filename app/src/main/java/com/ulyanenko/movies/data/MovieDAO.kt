@@ -17,10 +17,10 @@ interface MovieDAO {
     fun getFavouriteMovie(movieId: Int): LiveData<Movie>
 
     @Insert
-    fun insertMovie(movie: Movie): Completable
+    fun insertMovie(movie: Movie)
 
     @Query("Delete FROM favourite_movies where id = :movieId")
-    fun removeMovie(movieId: Int): Completable
+    fun removeMovie(movieId: Int)
 
 
 }

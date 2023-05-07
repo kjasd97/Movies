@@ -5,7 +5,7 @@ import com.ulyanenko.movies.data.Movie
 
 class GetMoviesUseCase (private val movieRepository: MovieRepository) {
 
-    fun getMovies(): LiveData<List<Movie>> {
+      fun getMovies(): LiveData<List<Movie>> {
     return movieRepository.getMovies()
     }
 

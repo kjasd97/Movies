@@ -4,8 +4,8 @@ import io.reactivex.rxjava3.core.Completable
 
 class RemoveMovieUseCase(private val movieRepository: MovieRepository) {
 
-    fun deleteMovie(id:Int):Completable{
-       return movieRepository.deleteMovie(id)
+    suspend fun deleteMovie(id:Int){
+       movieRepository.deleteMovie(id)
     }
 
 }
