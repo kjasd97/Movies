@@ -1,4 +1,4 @@
-package com.ulyanenko.movies
+package com.ulyanenko.movies.data
 
 import android.app.Application
 import androidx.room.Database
@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase
 abstract class MovieDataBase : RoomDatabase() {
 
 
-    abstract fun methodsMovieDao():MovieDAO
+    abstract fun methodsMovieDao(): MovieDAO
 
     companion object {
 

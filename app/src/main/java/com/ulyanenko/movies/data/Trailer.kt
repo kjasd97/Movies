@@ -1,4 +1,4 @@
-package com.ulyanenko.movies
+package com.ulyanenko.movies.data
 
 import com.google.gson.annotations.SerializedName
 

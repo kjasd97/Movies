@@ -1,8 +1,7 @@
-package com.ulyanenko.movies
+package com.ulyanenko.movies.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -10,6 +9,8 @@ import android.widget.ProgressBar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ulyanenko.movies.R
+import com.ulyanenko.movies.data.Movie
 
 class MainActivity : AppCompatActivity() {
 
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        moviesAdapter.setOnMovieClickListener(object : MoviesAdapter.OnMovieClickListener{
+        moviesAdapter.setOnMovieClickListener(object : MoviesAdapter.OnMovieClickListener {
             override fun onMovieClick(movie: Movie) {
                 val intent = MovieDetailActivity.newIntent(this@MainActivity, movie)
                 startActivity(intent)
@@ -63,7 +64,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-       if(item.itemId==R.id.favMovies){
+       if(item.itemId== R.id.favMovies){
            val intent = FavouriteMovieActivity.newIntent(this)
            startActivity(intent)
        }

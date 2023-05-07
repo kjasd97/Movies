@@ -1,4 +1,4 @@
-package com.ulyanenko.movies
+package com.ulyanenko.movies.presentation
 
 import android.content.Context
 import android.content.Intent
@@ -7,6 +7,8 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ulyanenko.movies.R
+import com.ulyanenko.movies.data.Movie
 
 class FavouriteMovieActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
