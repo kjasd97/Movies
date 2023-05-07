@@ -16,11 +16,11 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 
 class MovieDetailViewModel(application: Application) : AndroidViewModel(application) {
 
-   private val repository: MovieRepositoryImpl = MovieRepositoryImpl(application)
+    private val repository: MovieRepositoryImpl = MovieRepositoryImpl(application)
 
-   private val getMovie = GetMovieUseCase(repository)
-   private val addMovie = AddMovieUseCase(repository)
-   private val deleteMovie = RemoveMovieUseCase(repository)
+    private val getMovie = GetMovieUseCase(repository)
+    private val addMovie = AddMovieUseCase(repository)
+    private val deleteMovie = RemoveMovieUseCase(repository)
 
     private val _trailers = MutableLiveData<MutableList<Trailer>>()
     val trailers: LiveData<MutableList<Trailer>>
@@ -30,21 +30,25 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
     val reviews: LiveData<MutableList<Review>>
         get() = _reviews
 
-
-
+    val compositeDisposable = CompositeDisposable()
 
 
     fun getFavouriteMovie(id: Int): LiveData<Movie> {
         return getMovie.getMovie(id)
     }
 
-    fun insertMovie(movie: Movie){
-        addMovie.addMovie(movie)
-
+    fun insertMovie(movie: Movie) {
+        val disposable = addMovie.addMovie(movie)
+            .subscribeOn(Schedulers.io())
+            .subscribe()
+        compositeDisposable.add(disposable)
     }
 
-    fun removeMovie(movieId: Int){
-       deleteMovie.deleteMovie(movieId)
+    fun removeMovie(movieId: Int) {
+        val disposable = deleteMovie.deleteMovie(movieId)
+            .subscribeOn(Schedulers.io())
+            .subscribe()
+        compositeDisposable.add(disposable)
     }
 
 
@@ -59,6 +63,7 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
                 {
                     Log.d("bad", it.toString())
                 })
+        compositeDisposable.add(disposable)
     }
 
     fun loadReviews(id: Int) {
@@ -72,11 +77,13 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
                 {
                     Log.d("Load Review Error", it.toString())
                 })
+        compositeDisposable.add(disposable)
     }
 
 
     override fun onCleared() {
         super.onCleared()
+        compositeDisposable.dispose()
     }
 
 
