@@ -6,12 +6,12 @@ import io.reactivex.rxjava3.core.Completable
 
 interface MovieRepository {
 
-    fun addMovie(movie:Movie):Completable
+   suspend fun addMovie(movie:Movie)
 
-    fun getMovies ():LiveData<List<Movie>>
+   fun getMovies ():LiveData<List<Movie>>
 
-    fun getMovie(id:Int):LiveData<Movie>
+   fun getMovie(id:Int):LiveData<Movie>
 
-    fun deleteMovie(id:Int):Completable
+    suspend fun deleteMovie(id:Int)
 
 }

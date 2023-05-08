@@ -13,6 +13,7 @@ import com.ulyanenko.movies.domain.RemoveMovieUseCase
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.*
 
 class MovieDetailViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -30,7 +31,8 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
     val reviews: LiveData<MutableList<Review>>
         get() = _reviews
 
-    val compositeDisposable = CompositeDisposable()
+
+    private val scope = CoroutineScope(Dispatchers.IO)
 
 
     fun getFavouriteMovie(id: Int): LiveData<Movie> {
@@ -38,52 +40,44 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     fun insertMovie(movie: Movie) {
-        val disposable = addMovie.addMovie(movie)
-            .subscribeOn(Schedulers.io())
-            .subscribe()
-        compositeDisposable.add(disposable)
+        scope.launch {
+            addMovie.addMovie(movie)
+        }
     }
 
     fun removeMovie(movieId: Int) {
-        val disposable = deleteMovie.deleteMovie(movieId)
-            .subscribeOn(Schedulers.io())
-            .subscribe()
-        compositeDisposable.add(disposable)
+        scope.launch {
+            deleteMovie.deleteMovie(movieId)
+        }
     }
 
 
     fun loadTrailers(id: Int) {
-        val disposable = ApiFactory.apiService.loadTrailers(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .map { t -> t.trailersList.trailers }
-            .subscribe({
-                _trailers.value = it
-            },
-                {
-                    Log.d("bad", it.toString())
-                })
-        compositeDisposable.add(disposable)
+        scope.launch {
+           val response= ApiFactory.apiService.loadTrailers(id)
+            val trailers = response.trailersList.trailers
+            withContext(Dispatchers.Main){
+                _trailers.value = trailers
+            }
+        }
+
     }
 
     fun loadReviews(id: Int) {
-        val disposable = ApiFactory.apiService.loadReviews(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .map { rewr -> rewr.reviews }
-            .subscribe({
-                _reviews.value = it
-            },
-                {
-                    Log.d("Load Review Error", it.toString())
-                })
-        compositeDisposable.add(disposable)
+        scope.launch{
+        val response = ApiFactory.apiService.loadReviews(id)
+        val review = response.reviews
+            withContext(Dispatchers.Main){
+                _reviews.value = review
+            }
+        }
+
     }
 
 
     override fun onCleared() {
         super.onCleared()
-        compositeDisposable.dispose()
+        scope.cancel()
     }
 
 
