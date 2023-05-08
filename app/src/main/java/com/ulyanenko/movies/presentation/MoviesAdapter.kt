@@ -6,14 +6,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import com.bumptech.glide.Glide
 import com.ulyanenko.movies.R
 import com.ulyanenko.movies.data.Movie
+import com.ulyanenko.movies.presentation.util.MovieDiffCallback
 
-class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
+class MoviesAdapter :ListAdapter<Movie, MovieViewHolder>(MovieDiffCallback()) {
 
-    private var movies: List<Movie> = mutableListOf()
     private lateinit var onReachEndListener: OnReachEndListener
     private lateinit var onMovieClickListener: OnMovieClickListener
 
@@ -25,11 +25,6 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
         this.onMovieClickListener = onMovieClickListener
     }
 
-    fun setMovie(movies: List<Movie>) {
-        this.movies = movies
-        notifyDataSetChanged()
-    }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
@@ -38,12 +33,9 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
         return MovieViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return movies.size
-    }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val movie = movies[position]
+        val movie = getItem(position)
 
         Glide.with(holder.itemView)
             .load(movie.poster.url)
@@ -62,7 +54,7 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
         holder.textViewRating.background = backGround
         holder.textViewRating.text =  String.format("%.1f", rating)
 
-        if (position == movies.size - 10 && onReachEndListener != null) {
+        if (position == currentList.size - 10 && onReachEndListener != null) {
             onReachEndListener.onReachEnd()
         }
 
@@ -83,11 +75,4 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
         fun onMovieClick(movie: Movie)
     }
 
-    class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
-        val imageViewPoster: ImageView = view.findViewById(R.id.poster)
-        val textViewRating: TextView = view.findViewById(R.id.rating)
-
-
-    }
 }

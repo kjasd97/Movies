@@ -6,18 +6,13 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ulyanenko.movies.R
 import com.ulyanenko.movies.data.Review
+import com.ulyanenko.movies.presentation.util.ReviewDiffCallback
 
-class ReviewAdapter : RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
-
-    private var reviews: MutableList<Review> = mutableListOf()
-
-    fun setReviews(reviews: MutableList<Review>) {
-        this.reviews = reviews
-        notifyDataSetChanged()
-    }
+class ReviewAdapter : ListAdapter<Review, ReviewAdapter.ReviewViewHolder>(ReviewDiffCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
@@ -29,12 +24,10 @@ class ReviewAdapter : RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
         return ReviewViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return reviews.size
-    }
+
 
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
-        val review = reviews[position]
+        val review = getItem(position)
 
         holder.textViewAuthor.text = review.author
         holder.textViewReview.text = review.review

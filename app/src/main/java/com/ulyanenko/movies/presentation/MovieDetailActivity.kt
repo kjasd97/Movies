@@ -50,12 +50,12 @@ class MovieDetailActivity : AppCompatActivity() {
 
         movieDetailViewModel.loadTrailers(movie.id)
         movieDetailViewModel.trailers.observe(this) {
-            trailersAdapter.setTrailers(it)
+            trailersAdapter.submitList(it)
         }
 
         movieDetailViewModel.loadReviews(movie.id)
         movieDetailViewModel.reviews.observe(this) {
-            reviewAdapter.setReviews(it)
+            reviewAdapter.submitList(it)
         }
 
         trailersAdapter.setTrailersOnClick(object : TrailersAdapter.TrailersOnClickListener {
