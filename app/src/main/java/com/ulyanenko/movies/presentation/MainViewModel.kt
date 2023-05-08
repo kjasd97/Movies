@@ -11,10 +11,11 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.functions.Consumer
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.*
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val compositeDisposable = CompositeDisposable()
+    private val scope = CoroutineScope(Dispatchers.IO)
     private var page: Int = 0
 
     private val _movies = MutableLiveData<MutableList<Movie>>()
@@ -25,45 +26,41 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
-
     fun loadMovies() {
-        val loading =_isLoading.value
-        if (loading == true){
+
+        val loading = _isLoading.value
+        if (loading == true) {
             return
         }
 
-        val disposable = ApiFactory.apiService.loadMovies(page)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {
-                _isLoading.value = true
-            }
-            .doAfterTerminate {
-                _isLoading.value = false
-            }
-            .subscribe({
+        _isLoading.value = true
 
-                val loadedMovies = _movies.value
-                if (loadedMovies != null) {
-                    loadedMovies.addAll(it.movie)
-                    _movies.value = loadedMovies
-                } else {
-                    _movies.value = it.movie
+        scope.launch {
+            val response = ApiFactory.apiService.loadMovies(page)
+            val loadedMovies = _movies.value
+            if (loadedMovies != null) {
+                withContext(Dispatchers.Main) {
+                    loadedMovies.addAll(response.movie)
                 }
-                page++
-            },
-                object : Consumer<Throwable> {
-                    override fun accept(t: Throwable) {
-                        Log.d("MainViewModel", t.toString())
-                    }
+            } else {
+                withContext(Dispatchers.Main) {
+                    _movies.value = response.movie
+                }
+            }
 
-                })
-        compositeDisposable.add(disposable)
+        }
+        _isLoading.value = false
+        page++
     }
 
     override fun onCleared() {
         super.onCleared()
-        compositeDisposable.dispose()
+        scope.cancel()
     }
 
 }
+
+
+
+
+
