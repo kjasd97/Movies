@@ -4,20 +4,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ulyanenko.movies.R
 import com.ulyanenko.movies.data.Trailer
+import com.ulyanenko.movies.presentation.util.TrailerDiffCallback
 
-class TrailersAdapter : RecyclerView.Adapter<TrailersAdapter.TrailersViewHolder>() {
+class TrailersAdapter : ListAdapter<Trailer, TrailersAdapter.TrailersViewHolder>(TrailerDiffCallback()) {
 
-    private var trailers: MutableList<Trailer> = mutableListOf()
 
     lateinit var trailersOnClickListener: TrailersOnClickListener
 
-    fun setTrailers(trailers: MutableList<Trailer>) {
-        this.trailers = trailers
-        notifyDataSetChanged()
-    }
 
     fun setTrailersOnClick(trailersOnClickListener: TrailersOnClickListener){
         this.trailersOnClickListener = trailersOnClickListener
@@ -31,12 +28,9 @@ class TrailersAdapter : RecyclerView.Adapter<TrailersAdapter.TrailersViewHolder>
         return TrailersViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return trailers.size
-    }
 
     override fun onBindViewHolder(holder: TrailersViewHolder, position: Int) {
-    val trailer = trailers[position]
+    val trailer = getItem(position)
         holder.textViewTrailerName.text = trailer.name
 
         holder.itemView.setOnClickListener {

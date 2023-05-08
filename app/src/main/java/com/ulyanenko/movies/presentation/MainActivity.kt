@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         mainViewModel.movies.observe(this) {
-            moviesAdapter.setMovie(it)
+            moviesAdapter.submitList(it)
         }
 
         mainViewModel.isLoading.observe(this) {

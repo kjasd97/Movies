@@ -35,7 +35,7 @@ class FavouriteMovieActivity : AppCompatActivity() {
             ViewModelProvider(this).get(FavouriteMoviesViewModel::class.java)
 
         favouriteMoviesViewModel.getMovies().observe(this) {
-            movieAdapter.setMovie(it)
+            movieAdapter.submitList(it)
         }
     }
 
