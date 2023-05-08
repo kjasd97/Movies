@@ -9,14 +9,19 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ulyanenko.movies.R
 import com.ulyanenko.movies.data.Movie
+import com.ulyanenko.movies.databinding.ActivityFavouriteMovieBinding
 
 class FavouriteMovieActivity : AppCompatActivity() {
+
+    private val binding by lazy {
+        ActivityFavouriteMovieBinding.inflate(layoutInflater)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_favourite_movie)
+        setContentView(binding.root)
 
         val recyclerViewFavouriteMovies: RecyclerView =
-            findViewById(R.id.recyclerViewFavouriteMovies)
+            binding.recyclerViewFavouriteMovies
         val movieAdapter = MoviesAdapter()
         recyclerViewFavouriteMovies.layoutManager = GridLayoutManager(this, 2)
         recyclerViewFavouriteMovies.adapter = movieAdapter
