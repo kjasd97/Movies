@@ -11,24 +11,27 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ulyanenko.movies.R
 import com.ulyanenko.movies.data.Movie
+import com.ulyanenko.movies.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mainViewModel: MainViewModel
-    private lateinit var recyclerView: RecyclerView
     private lateinit var moviesAdapter: MoviesAdapter
-    private lateinit var progressBarLoading: ProgressBar
 
+
+    private val binding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
 
         init()
 
         moviesAdapter = MoviesAdapter()
-        recyclerView.adapter = moviesAdapter
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        binding.moviesHolder.adapter = moviesAdapter
+        binding.moviesHolder.layoutManager = GridLayoutManager(this, 2)
 
         mainViewModel.movies.observe(this) {
             moviesAdapter.submitList(it)
@@ -36,9 +39,9 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.isLoading.observe(this) {
             if (it) {
-                progressBarLoading.visibility = View.VISIBLE
+                binding.progressBarLoading.visibility = View.VISIBLE
             } else {
-                progressBarLoading.visibility = View.GONE
+                binding.progressBarLoading.visibility = View.GONE
             }
         }
 
@@ -59,22 +62,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-       menuInflater.inflate(R.menu.main_menu, menu)
+        menuInflater.inflate(R.menu.main_menu, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-       if(item.itemId== R.id.favMovies){
-           val intent = FavouriteMovieActivity.newIntent(this)
-           startActivity(intent)
-       }
+        if (item.itemId == R.id.favMovies) {
+            val intent = FavouriteMovieActivity.newIntent(this)
+            startActivity(intent)
+        }
         return super.onOptionsItemSelected(item)
     }
 
-   private fun init(){
-        mainViewModel  = ViewModelProvider(this).get(MainViewModel::class.java)
-        recyclerView= findViewById(R.id.moviesHolder)
-        progressBarLoading= findViewById(R.id.progressBarLoading)
+    private fun init() {
+        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         mainViewModel.loadMovies()
 
     }

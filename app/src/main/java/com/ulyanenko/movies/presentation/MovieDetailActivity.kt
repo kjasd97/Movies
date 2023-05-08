@@ -5,8 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -14,39 +12,39 @@ import com.bumptech.glide.Glide
 import com.ulyanenko.movies.R
 import com.ulyanenko.movies.data.Movie
 import com.ulyanenko.movies.data.Trailer
+import com.ulyanenko.movies.databinding.ActivityMovieDetailBinding
 
 class MovieDetailActivity : AppCompatActivity() {
 
-    private lateinit var imageViewPoster: ImageView
-    private lateinit var textViewTitle: TextView
-    private lateinit var textViewYear: TextView
-    private lateinit var textViewDescription: TextView
+    private val binding by lazy {
+        ActivityMovieDetailBinding.inflate(layoutInflater)
+    }
+
+
     private lateinit var movieDetailViewModel: MovieDetailViewModel
-    private lateinit var recyclerViewTrailersHolder: RecyclerView
     private lateinit var trailersAdapter: TrailersAdapter
-    private lateinit var recyclerViewReviewHolder: RecyclerView
     private lateinit var reviewAdapter: ReviewAdapter
-    private lateinit var imageViewStarr: ImageView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_movie_detail)
+        setContentView(binding.root)
 
-        initViews()
+        init()
 
         trailersAdapter = TrailersAdapter()
-        recyclerViewTrailersHolder.adapter = trailersAdapter
+        binding.recycleViewTrailers.adapter = trailersAdapter
 
         reviewAdapter = ReviewAdapter()
-        recyclerViewReviewHolder.adapter = reviewAdapter
+       binding.recycleViewReviews.adapter = reviewAdapter
 
         val movie = intent.getSerializableExtra("movie") as Movie
 
-        Glide.with(this).load(movie.poster.url).into(imageViewPoster)
-        textViewTitle.text = movie.name
+        Glide.with(this).load(movie.poster.url).into( binding.imageViewPoster)
+        binding.textViewTitle.text = movie.name
         val year = movie.year
-        textViewYear.text = "$year"
-        textViewDescription.text = movie.description
+        binding.textViewYear.text = "$year"
+        binding.textViewDescription.text = movie.description
 
         movieDetailViewModel.loadTrailers(movie.id)
         movieDetailViewModel.trailers.observe(this) {
@@ -77,13 +75,13 @@ class MovieDetailActivity : AppCompatActivity() {
 
         movieDetailViewModel.getFavouriteMovie(movie.id).observe(this) {
             if (it == null) {
-                imageViewStarr.setImageDrawable(starOff)
-                imageViewStarr.setOnClickListener {
+                binding.imageViewStar.setImageDrawable(starOff)
+                binding.imageViewStar.setOnClickListener {
                     movieDetailViewModel.insertMovie(movie)
                 }
             } else {
-                imageViewStarr.setImageDrawable(starOn)
-                imageViewStarr.setOnClickListener {
+                binding.imageViewStar.setImageDrawable(starOn)
+                binding.imageViewStar.setOnClickListener {
                     movieDetailViewModel.removeMovie(movie.id)
                 }
             }
@@ -92,15 +90,8 @@ class MovieDetailActivity : AppCompatActivity() {
     }
 
 
-    fun initViews() {
-        imageViewPoster = findViewById(R.id.imageViewPoster)
-        textViewTitle = findViewById(R.id.textViewTitle)
-        textViewYear = findViewById(R.id.textViewYear)
-        textViewDescription = findViewById(R.id.textViewDescription)
+    fun init() {
         movieDetailViewModel = ViewModelProvider(this).get(MovieDetailViewModel::class.java)
-        recyclerViewTrailersHolder = findViewById(R.id.recycleViewTrailers)
-        recyclerViewReviewHolder = findViewById(R.id.recycleViewReviews)
-        imageViewStarr = findViewById(R.id.imageViewStar)
     }
 
 
