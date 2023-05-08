@@ -38,19 +38,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         scope.launch {
             val response = ApiFactory.apiService.loadMovies(page)
             val loadedMovies = _movies.value
-            if (loadedMovies != null) {
-                withContext(Dispatchers.Main) {
+            withContext(Dispatchers.Main) {
+                if (loadedMovies != null) {
                     loadedMovies.addAll(response.movie)
-                }
-            } else {
-                withContext(Dispatchers.Main) {
+
+                } else {
                     _movies.value = response.movie
                 }
+                _isLoading.value = false
             }
-
+            page++
         }
-        _isLoading.value = false
-        page++
     }
 
     override fun onCleared() {
