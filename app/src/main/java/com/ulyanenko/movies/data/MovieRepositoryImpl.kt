@@ -2,8 +2,8 @@ package com.ulyanenko.movies.data
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import com.ulyanenko.movies.data.database.MovieDataBase
 import com.ulyanenko.movies.domain.MovieRepository
-import io.reactivex.rxjava3.core.Completable
 
 class MovieRepositoryImpl (application: Application):MovieRepository {
 

@@ -1,4 +1,4 @@
-package com.ulyanenko.movies.data
+package com.ulyanenko.movies.data.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

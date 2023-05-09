@@ -1,18 +1,14 @@
 package com.ulyanenko.movies.presentation
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.ulyanenko.movies.data.MovieDataBase
 import com.ulyanenko.movies.data.*
+import com.ulyanenko.movies.data.network.ApiFactory
 import com.ulyanenko.movies.domain.AddMovieUseCase
 import com.ulyanenko.movies.domain.GetMovieUseCase
 import com.ulyanenko.movies.domain.RemoveMovieUseCase
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.*
 
 class MovieDetailViewModel(application: Application) : AndroidViewModel(application) {
