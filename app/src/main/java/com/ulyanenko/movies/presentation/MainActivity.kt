@@ -1,5 +1,8 @@
 package com.ulyanenko.movies.presentation
 
+import android.content.Intent
+import android.content.IntentFilter
+import android.net.wifi.WifiManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -11,12 +14,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ulyanenko.movies.R
 import com.ulyanenko.movies.data.Movie
+import com.ulyanenko.movies.data.receiver.MyReceiver
 import com.ulyanenko.movies.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mainViewModel: MainViewModel
     private lateinit var moviesAdapter: MoviesAdapter
+    private val receiver = MyReceiver()
 
 
     private val binding by lazy {
@@ -58,6 +63,12 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+
+
+        val intentFilter = IntentFilter().apply {
+             addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
+        }
+        registerReceiver(receiver, intentFilter)
 
     }
 

@@ -1,16 +1,11 @@
 package com.ulyanenko.movies.presentation
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.ulyanenko.movies.data.ApiFactory
+import com.ulyanenko.movies.data.network.ApiFactory
 import com.ulyanenko.movies.data.Movie
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.functions.Consumer
-import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.*
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {

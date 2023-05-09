@@ -1,9 +1,10 @@
-package com.ulyanenko.movies.data
+package com.ulyanenko.movies.data.database
 
 import android.app.Application
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.ulyanenko.movies.data.Movie
 
 @Database(entities = [Movie::class], version = 1, exportSchema = false)
 abstract class MovieDataBase : RoomDatabase() {
